@@ -4,6 +4,7 @@ from _temp.config import PAGE_CONFIG
 import pandas as pd  
 from scrap.scrape import Updatedata 
 from utils.auth import check_credentials
+from utils.generate_response import GenerateResponse
 
 
 if "authenticated" not in st.session_state:
@@ -65,7 +66,7 @@ if sidebar_main == "Mutual Fund List" :
             Principle = principle, returns = df.iloc[i]['overall_return'], expense_ratio = df.iloc[i]['expense_ratio'], 
             num_years = num_years, investment_type = s_type
         )
-        return_before_tax, return_after_tax = obj.calculate_tax()
+        return_after_tax, return_before_tax = obj.calculate_tax()
         income_after_tax.append(return_after_tax)
         income_before_tax.append(return_before_tax)
 
@@ -103,6 +104,31 @@ if sidebar_main == "Plot Return" :
 
     processed_df = pd.DataFrame(parent_list, columns=['principle', 'return_after_tax', 'return_before_tax'])
     st.line_chart(processed_df)
+
+    ######################### AI #########################
+    st.divider()
+    obj = GenerateResponse(
+        expense_ratio = fund_details['expense_ratio'].iloc[0], 
+        fund_manager_name = fund_details['fund_manager_name'].iloc[0], 
+        fund_manager_experience = fund_details['fund_manager_experience'].iloc[0], 
+        fund_manager_prev_funds = fund_details['fund_manager_prev_funds'].iloc[0], 
+        fund_type = fund_details['fund_type'].iloc[0], category = fund_details['category'].iloc[0], 
+        risk = fund_details['risk'].iloc[0], nav = fund_details['nav'].iloc[0], 
+        fund_size = fund_details['fund_size'].iloc[0], overall_return = fund_details['overall_return'].iloc[0], 
+        rank = fund_details['rank'].iloc[0], AUM = fund_details['AUM'].iloc[0]
+    )
+
+    output = obj.generate_respone()
+    pros, cons = output['pros'], output['cons']
+    col1, col2 = st.columns(2)
+    with col1 :
+        st.markdown("### Pros")
+        for pro in pros :
+            st.success(pro)
+    with col2 :
+        st.markdown("### Cons")
+        for con in cons :
+            st.error(con)
 
 if sidebar_main == "Admin" :
     st.title("Admin Log in")

@@ -15,3 +15,20 @@ PAGE_CONFIG = {
     "page_title":"Mutual Fund Selector", "layout":"centered", 
     "initial_sidebar_state":"auto"
 }
+
+FUND_MANAGER_PROMPT = """
+Given the following mutual fund details:
+
+- **Expense Ratio**: {expense_ratio}%
+- **Fund Manager Details**: {fund_manager_details}
+- **Fund Type**: {fund_type}
+- **Category**: {category}
+- **Risk Level**: {risk}
+- **NAV (Net Asset Value)**: {nav}
+- **Fund Size**: {fund_size} Cr
+- **Overall Return**: {overall_return}%
+- **Rank**: {rank}
+- **Assets Under Management (AUM)**: {AUM} Cr
+
+Please provide a detailed analysis including the pros and cons of investing in this mutual fund.
+"""
