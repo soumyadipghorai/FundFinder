@@ -107,19 +107,26 @@ if sidebar_main == "Plot Return" :
 
     ######################### AI #########################
     st.divider()
-    obj = GenerateResponse(
-        expense_ratio = fund_details['expense_ratio'].iloc[0], 
-        fund_manager_name = fund_details['fund_manager_name'].iloc[0], 
-        fund_manager_experience = fund_details['fund_manager_experience'].iloc[0], 
-        fund_manager_prev_funds = fund_details['fund_manager_prev_funds'].iloc[0], 
-        fund_type = fund_details['fund_type'].iloc[0], category = fund_details['category'].iloc[0], 
-        risk = fund_details['risk'].iloc[0], nav = fund_details['nav'].iloc[0], 
-        fund_size = fund_details['fund_size'].iloc[0], overall_return = fund_details['overall_return'].iloc[0], 
-        rank = fund_details['rank'].iloc[0], AUM = fund_details['AUM'].iloc[0]
-    )
+    if fund_details['fund_name'].iloc[0] not in st.session_state : 
+        st.session_state[fund_details['fund_name'].iloc[0]] = None
+        print('called..................')
 
-    output = obj.generate_respone()
-    pros, cons = output['pros'], output['cons']
+        obj = GenerateResponse(
+            expense_ratio = fund_details['expense_ratio'].iloc[0], 
+            fund_manager_name = fund_details['fund_manager_name'].iloc[0], 
+            fund_manager_experience = fund_details['fund_manager_experience'].iloc[0], 
+            fund_manager_prev_funds = fund_details['fund_manager_prev_funds'].iloc[0], 
+            fund_type = fund_details['fund_type'].iloc[0], category = fund_details['category'].iloc[0], 
+            risk = fund_details['risk'].iloc[0], nav = fund_details['nav'].iloc[0], 
+            fund_size = fund_details['fund_size'].iloc[0], overall_return = fund_details['overall_return'].iloc[0], 
+            rank = fund_details['rank'].iloc[0], AUM = fund_details['AUM'].iloc[0]
+        )
+
+
+        output = obj.generate_respone()
+        st.session_state[fund_details['fund_name'].iloc[0]] = output
+
+    pros, cons = st.session_state[fund_details['fund_name'].iloc[0]]['pros'], st.session_state[fund_details['fund_name'].iloc[0]]['cons']
     col1, col2 = st.columns(2)
     with col1 :
         st.markdown("### Pros")
