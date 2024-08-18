@@ -38,29 +38,39 @@ if sidebar_main == "Calculator" :
         s_type = st.radio(label="Enter investment type", options=['SIP', "Lumpsum"])
     submit_button = st.button(label='submit')
     if submit_button : 
+        st.markdown("#### Results ")
         obj = CalculateReturns(
             Principle = p, returns = r, expense_ratio = e, 
             stamp_duty = s, num_years = n, investment_type = s_type
         )
-        st.write(obj.calculate_tax())
+        after_tax, before_tax = obj.calculate_tax()
+        col1, col2 = st.columns(2)
+        with col1 : 
+            st.warning("Return after tax deduction : " + str(after_tax))
+        with col2 :
+            st.success("Return before tax deduction : " + str(before_tax)) 
 
 if sidebar_main == "Mutual Fund List" : 
     st.title("Mutual Fund List") 
     df = pd.read_csv('data/mutual_fund_data.csv')
     df.dropna(inplace=True)
-    df.drop(['fund_manager_name','fund_manager_teneur','fund_manager_experience','fund_manager_prev_funds','fund_manager_prev_total_funds'], axis = 1, inplace = True)
+    fixed_items = ['return_before_tax_deduction', 'return_atfer_tax_deduction', 'fund_name']
+    removed_items = ['fund_manager_name','fund_manager_teneur','fund_manager_experience','fund_manager_prev_funds','fund_manager_prev_total_funds']
+
     col1, col2 = st.columns(2)
     with col1 :
         s_type = st.radio(label="Enter investment type", options=['SIP', "Lumpsum"])
         risk_type = st.selectbox("Risk Type",df['risk'].unique())
+        principle = st.slider("Select deposit amount", step = 500, min_value = 500, max_value = 100000 if s_type == "SIP" else 100000*1000) 
     with col2 :
-        category = st.selectbox("Fund Category",df['category'].unique())
+        fund_type = st.selectbox("Fund Type",df['fund_type'].unique())
         num_years = st.slider("Select number of years", step = 1, min_value = 1, max_value = 100) 
-        
-    principle = st.slider("Select deposit amount", step = 500, min_value = 500, max_value = 100000 if s_type == "SIP" else 100000*1000) 
+        selected_columns = st.multiselect(label="Select features", options= list(
+            filter(lambda x: x not in fixed_items+removed_items, list(df.columns))
+        ))
         
     income_before_tax, income_after_tax = [], []
-    df = df[(df.risk == risk_type) & (df.category == category)]
+    df = df[(df.risk == risk_type) & (df.fund_type == fund_type)]
     for i in range(len(df)) : 
         obj = CalculateReturns(
             Principle = principle, returns = df.iloc[i]['overall_return'], expense_ratio = df.iloc[i]['expense_ratio'], 
@@ -70,9 +80,15 @@ if sidebar_main == "Mutual Fund List" :
         income_after_tax.append(return_after_tax)
         income_before_tax.append(return_before_tax)
 
-    df['return_atfer_tax'] = income_after_tax
-    df['return_before_tax'] = income_before_tax
+    df['return_atfer_tax_deduction'] = income_after_tax
+    df['return_before_tax_deduction'] = income_before_tax
 
+    # st.divider()
+    # st.markdown("#### Shortlisted funds")
+    st.text("")
+    st.text("")
+    to_drop = list(filter(lambda x : x not in selected_columns+fixed_items, list(df.columns)))
+    df.drop(to_drop, axis = 1, inplace = True)
     st.dataframe(df, use_container_width=True)
 
 if sidebar_main == "Plot Return" : 
