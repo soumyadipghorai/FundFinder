@@ -1,5 +1,6 @@
 # Ignore .env files
 .env
+data/master_data.csv
 
 # Ignore Python bytecode and cache files
 __pycache__/
