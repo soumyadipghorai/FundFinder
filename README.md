@@ -50,12 +50,28 @@ To set up FundFinder, you need to have Python and Streamlit installed. Follow th
 
 ## Project Structure
 
-- `app.py`: Main Streamlit application file.
-- `scraper.py`: Contains the logic for scraping fund details from the internet.
-- `calculations.py`: Functions to calculate returns and tax impacts.
-- `visualizations.py`: Code for generating charts and visualizations.
-- `requirements.txt`: List of Python packages required for the project.
-- `README.md`: This file.
+```
+|---_temp 
+|   |-- condfig.py
+|
+|--- data 
+|   |-- mutual_fund_data.py
+|
+|--- notebooks 
+|   |-- test.ipynb
+|
+|--- scrap 
+|   |-- scrape.py
+|
+|--- utils 
+|   |-- calculate_return.py
+|
+|--- app.py 
+|--- .gitignore 
+|--- LICENSE
+|--- README.md 
+|--- requirements.txt
+```
 
 ## Requirements
 
@@ -76,7 +92,7 @@ Contributions are welcome! Please fork the repository and submit a pull request 
 
 ## Contact
 
-For any questions or feedback, please reach out to [your-email@example.com](mailto:your-email@example.com).
+For any questions or feedback, please reach out to [your-email@example.com](mailto:work.soumyadipghorai@gmail.com).
 
 ---
 
