@@ -1,21 +1,28 @@
 import streamlit as st 
 from utils.calculate_return import CalculateReturns
 from _temp.config import PAGE_CONFIG
-import pandas as pd 
-import numpy as np
-from scrap.scrape import Updatedata
+import pandas as pd  
+from scrap.scrape import Updatedata 
+from utils.auth import check_credentials
+
+
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+
 st.set_page_config(**PAGE_CONFIG)
 
 st.sidebar.markdown("## Controls") 
-sidebar_main = st.sidebar.selectbox('Navigation', ['Calculator', 'Mutual Fund List', 'Plot Return'])
-sb_button = st.sidebar.button('scrape')
+sidebar_main = st.sidebar.selectbox('Navigation', ['Calculator', 'Mutual Fund List', 'Plot Return', 'Admin'])
+sb_button = st.sidebar.button('scrape') 
 
 if sb_button :
-    my_bar = st.sidebar.progress(0, text="Operation in progress. Please wait.")
-    obj = Updatedata(bar_obj=my_bar, start=10, end = 13)
-    obj.create_dataframe()
-    my_bar.empty()
-    
+    if not st.session_state.authenticated :
+        st.success("Already updated") 
+    else :
+        my_bar = st.sidebar.progress(0, text="Operation in progress. Please wait.")
+        obj = Updatedata(bar_obj=my_bar, start=1, end = 106)
+        obj.create_dataframe()
+        my_bar.empty()
 
 if sidebar_main == "Calculator" :
     st.title("Calculate returns") 
@@ -96,3 +103,20 @@ if sidebar_main == "Plot Return" :
 
     processed_df = pd.DataFrame(parent_list, columns=['principle', 'return_after_tax', 'return_before_tax'])
     st.line_chart(processed_df)
+
+if sidebar_main == "Admin" :
+    st.title("Admin Log in")
+
+    if not st.session_state.authenticated:
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        if st.button("Login") : 
+            if check_credentials(username, password):
+                st.session_state.authenticated = True
+                st.success("Login successful!")
+            else:
+                st.error("Invalid username or password")
+    else : 
+        if st.button("Logout"):
+            st.session_state.authenticated = False
+            st.success("Log out successful!")
