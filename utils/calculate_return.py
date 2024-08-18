@@ -1,5 +1,5 @@
 class  CalculateReturns : 
-    def __init__(self, Principle: float, expense_ratio: float, num_years: int, returns: float, stamp_duty: float = 0.001, investment_type: str = "SIP") : 
+    def __init__(self, Principle: float, expense_ratio: float, num_years: int, returns: float, stamp_duty: float = 0.005, investment_type: str = "SIP") : 
         self.Principle = Principle
         self.expense_ratio = expense_ratio
         self.num_years = int(num_years)

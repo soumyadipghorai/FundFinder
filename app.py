@@ -3,11 +3,19 @@ from utils.calculate_return import CalculateReturns
 from _temp.config import PAGE_CONFIG
 import pandas as pd 
 import numpy as np
-
+from scrap.scrape import Updatedata
 st.set_page_config(**PAGE_CONFIG)
 
 st.sidebar.markdown("## Controls") 
 sidebar_main = st.sidebar.selectbox('Navigation', ['Calculator', 'Mutual Fund List', 'Plot Return'])
+sb_button = st.sidebar.button('scrape')
+
+if sb_button :
+    my_bar = st.sidebar.progress(0, text="Operation in progress. Please wait.")
+    obj = Updatedata(bar_obj=my_bar, start=10, end = 13)
+    obj.create_dataframe()
+    my_bar.empty()
+    
 
 if sidebar_main == "Calculator" :
     st.title("Calculate returns") 
@@ -31,15 +39,20 @@ if sidebar_main == "Calculator" :
 if sidebar_main == "Mutual Fund List" : 
     st.title("Mutual Fund List") 
     df = pd.read_csv('data/mutual_fund_data.csv')
+    df.dropna(inplace=True)
+    df.drop(['fund_manager_name','fund_manager_teneur','fund_manager_experience','fund_manager_prev_funds','fund_manager_prev_total_funds'], axis = 1, inplace = True)
     col1, col2 = st.columns(2)
     with col1 :
         s_type = st.radio(label="Enter investment type", options=['SIP', "Lumpsum"])
+        risk_type = st.selectbox("Risk Type",df['risk'].unique())
     with col2 :
-        principle = st.slider("Select deposit amount", step = 500, min_value = 500, max_value = 100000 if s_type == "SIP" else 100000*1000) 
-    num_years = st.slider("Select number of years", step = 1, min_value = 1, max_value = 100) 
+        category = st.selectbox("Fund Category",df['category'].unique())
+        num_years = st.slider("Select number of years", step = 1, min_value = 1, max_value = 100) 
         
-    df.dropna(inplace=True)
+    principle = st.slider("Select deposit amount", step = 500, min_value = 500, max_value = 100000 if s_type == "SIP" else 100000*1000) 
+        
     income_before_tax, income_after_tax = [], []
+    df = df[(df.risk == risk_type) & (df.category == category)]
     for i in range(len(df)) : 
         obj = CalculateReturns(
             Principle = principle, returns = df.iloc[i]['overall_return'], expense_ratio = df.iloc[i]['expense_ratio'], 
