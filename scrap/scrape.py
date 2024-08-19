@@ -3,16 +3,21 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import numpy as np  
+from dotenv import main
 from tqdm import tqdm 
+import os 
 from _temp.config import HEADERS, FUND_LIST_URL
 
+_ = main.load_dotenv(main.find_dotenv())
+BASE_URL = os.getenv("BASE_URL")
 
 class Updatedata : 
-    def __init__(self, bar_obj, parent_list: list = [], start: int = 1, end: int = 106) -> None : 
+    def __init__(self, bar_obj, parent_list: list = [], start: int = 1, end: int = 106, save_location: str = "") -> None : 
         self.bar_obj =bar_obj
         self.parent_list = parent_list
         self.start = start
         self.end = end
+        self.save_location = save_location
 
     def __preprocess_value(self, value) : 
         return value.replace(",", "") if not (isinstance(value, float) and np.isnan(value)) else None
@@ -20,7 +25,7 @@ class Updatedata :
     def __update_data(self) :
         self.parent_df = []
         for i in tqdm(range(self.start, self.end+1)) :  
-            url = FUND_LIST_URL.format(page_number = i) 
+            url = BASE_URL+FUND_LIST_URL.format(page_number = i) 
             fund_list_page = requests.get(url, headers = HEADERS)
             fund_list_page_htmlcontent = fund_list_page.content
             fund_list_page_soup = BeautifulSoup(fund_list_page_htmlcontent, 'html.parser')
@@ -28,8 +33,8 @@ class Updatedata :
             table_rows = fund_list_page_soup.find_all('tr', {'class' : "f22Card"})
             for j in tqdm(range(len(table_rows))) :   
                 curr, total = (i - self.start)*15 + j, (self.end+1)*15 - (self.start*15)
-                self.bar_obj.progress(curr/total, text="Operation in progress. Please wait.")
-                mutual_fund_url = "https://groww.in/"+table_rows[j].find('a')['href']
+                self.bar_obj.progress(curr/total, text="Updating Dataset. Please wait.")
+                mutual_fund_url = BASE_URL+table_rows[j].find('a')['href']
                 mututal_fund_page = requests.get(mutual_fund_url, headers = HEADERS)
                 mututal_fund_page_htmlcontent = mututal_fund_page.content
                 mututal_fund_page_soup = BeautifulSoup(mututal_fund_page_htmlcontent, 'html.parser')
@@ -93,6 +98,6 @@ class Updatedata :
             "overall_return", "rank", "AUM"
         ])
 
-        df.to_csv('data/mutual_fund_data.csv', index= False, encoding='utf-8')
+        df.to_csv(self.save_location, index= False, encoding='utf-8')
         # df.to_csv('mutual_fund_data.csv', index= False, encoding='utf-8')
         return 'success'

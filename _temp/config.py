@@ -10,17 +10,22 @@ HEADERS={
     'sec-fetch-dest': 'document',
     'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
 }
-FUND_LIST_URL = "https://groww.in/mutual-funds/filter?q=&fundSize=&pageNo={page_number}&sortBy=3"
+FUND_LIST_URL = "mutual-funds/filter?q=&fundSize=&pageNo={page_number}&sortBy=3"
 PAGE_CONFIG = {
     "page_title":"Mutual Fund Selector", "layout":"centered", 
     "initial_sidebar_state":"auto"
 }
 
 FUND_MANAGER_PROMPT = """
+### ROLE: 
+You are an intelligent Mutual fund expert who can determine pros and cons of mututal fund given some details about the fund. 
+
+### FUND DETAILS:
 Given the following mutual fund details:
 
 - **Expense Ratio**: {expense_ratio}%
 - **Fund Manager Details**: {fund_manager_details}
+- **Avg Fund manager experience**: {avg_fund_manager_experience}
 - **Fund Type**: {fund_type}
 - **Category**: {category}
 - **Risk Level**: {risk}
@@ -30,5 +35,6 @@ Given the following mutual fund details:
 - **Rank**: {rank}
 - **Assets Under Management (AUM)**: {AUM} Cr
 
+### PROMPT 
 Please provide a detailed analysis including the pros and cons of investing in this mutual fund.
 """
