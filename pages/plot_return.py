@@ -13,7 +13,10 @@ with col1 :
     s_type = st.radio(label="Enter investment type", options=['SIP', "Lumpsum"])
     select_fund = st.selectbox("Select Fund Name", options=df['fund_name'])
 with col2 :
-    principle = st.slider("Select deposit amount", step = 500, min_value = 500, max_value = 100000 if s_type == "SIP" else 100000*1000) 
+    principle = st.slider(
+        "Select deposit amount", step = 500, min_value = 500, 
+        max_value = 100000 if s_type == "SIP" else 100000*1000
+    ) 
     num_years = st.slider("Select number of years", step = 1, min_value = 1, max_value = 100) 
     
 df.dropna(inplace=True)
@@ -22,7 +25,8 @@ parent_list = []
 fund_details = df[df.fund_name == select_fund]
 for i in range(1, num_years+1) : 
     obj = CalculateReturns(
-        Principle = principle, returns = fund_details['overall_return'].iloc[0], expense_ratio = fund_details['expense_ratio'].iloc[0], 
+        Principle = principle, returns = fund_details['overall_return'].iloc[0], 
+        expense_ratio = fund_details['expense_ratio'].iloc[0], 
         num_years = i, investment_type = s_type
     )
     x, y = obj.calculate_tax()
@@ -33,6 +37,8 @@ for i in range(1, num_years+1) :
         parent_list.append([principle, x, y])
 
 processed_df = pd.DataFrame(parent_list, columns=['principle', 'return_after_tax', 'return_before_tax'])
+st.write("")
+st.write("")
 st.line_chart(processed_df)
 
 ######################### AI #########################
@@ -61,13 +67,13 @@ if fund_details['fund_name'].iloc[0] not in st.session_state :
     print(output)
     st.session_state[fund_details['fund_name'].iloc[0]] = output
 
-pros, cons = st.session_state[fund_details['fund_name'].iloc[0]]['pros'], st.session_state[fund_details['fund_name'].iloc[0]]['cons']
+pros = st.session_state[fund_details['fund_name'].iloc[0]]['pros']
+cons = st.session_state[fund_details['fund_name'].iloc[0]]['cons']
 col1, col2 = st.columns(2)
 with col1 :
     st.markdown("### Pros")
-    for pro in pros :
-        st.success(pro)
+    for pro in pros : st.success(pro)
+    
 with col2 :
     st.markdown("### Cons")
-    for con in cons :
-        st.error(con)
+    for con in cons : st.error(con)

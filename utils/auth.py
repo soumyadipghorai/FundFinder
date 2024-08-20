@@ -1,20 +1,22 @@
 import bcrypt
+import os
+from dotenv import main
 
-# In-memory user storage for simplicity
+_ = main.load_dotenv(main.find_dotenv())
+user_name, password = os.getenv("USER_NAME"), os.getenv("PASSWORD")
+
 users = {
-    "admin": bcrypt.hashpw("admin".encode('utf-8'), bcrypt.gensalt())
+    user_name : bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 }
-
-# Function to check credentials
+ 
 def check_credentials(username, password):
     if username in users:
         return bcrypt.checkpw(password.encode('utf-8'), users[username])
     return False
-
-# Function to register a new user
+ 
 def register_user(username, password):
     if username in users:
-        return False  # User already exists
+        return False
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     users[username] = hashed_password
     return True

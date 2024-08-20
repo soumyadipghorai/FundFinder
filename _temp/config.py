@@ -1,4 +1,4 @@
-HEADERS={
+HEADERS = {
     'authority': 'scrapeme.live',
     'dnt': '1',
     'upgrade-insecure-requests': '1',
@@ -10,10 +10,14 @@ HEADERS={
     'sec-fetch-dest': 'document',
     'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
 }
+
 FUND_LIST_URL = "mutual-funds/filter?q=&fundSize=&pageNo={page_number}&sortBy=3"
+
 PAGE_CONFIG = {
-    "page_title":"Mutual Fund Selector", "layout":"centered", 
-    "initial_sidebar_state":"auto"
+    "page_title": "Fund Finder", 
+    "page_icon": "https://fonts.gstatic.com/s/i/materialiconsoutlined/account_balance/v6/24px.svg",          
+    "layout": "centered",           
+    "initial_sidebar_state": "auto" 
 }
 
 FUND_MANAGER_PROMPT = """

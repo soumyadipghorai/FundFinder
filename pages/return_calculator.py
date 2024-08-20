@@ -13,6 +13,7 @@ with col2 :
     s = st.number_input(label="Enter stamp duty of the fund", min_value = 0.0, max_value = 100.0)
     e = st.number_input(label="Enter expense ratio of the fund", min_value = 0.0, max_value = 100.0)
     s_type = st.radio(label="Enter investment type", options=['SIP', "Lumpsum"])
+    
 submit_button = st.button(label='submit')
 if submit_button : 
     st.markdown("#### Results ")
