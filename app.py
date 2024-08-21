@@ -21,7 +21,7 @@ sb_button = st.sidebar.button('scrape')
 if sb_button :
     if not st.session_state.authenticated :
         my_bar = st.sidebar.progress(0, text = "Updating the Dataset. Please wait.")
-        obj = Updatedata(bar_obj = my_bar, start = 1, end = 1, save_location = 'dump/mutual_fund_data.csv')
+        obj = Updatedata(bar_obj = my_bar, start = 1, end = 1, save_location = 'dump/temp_data.csv')
         obj.create_dataframe()
         my_bar.empty()
         st.success("Dataset updated") 

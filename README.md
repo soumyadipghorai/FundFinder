@@ -8,6 +8,7 @@
 - **Return Calculations**: Compute actual returns before and after taxes.
 - **Expense Ratio Comparison**: Compare different funds based on their expense ratios.
 - **Interactive Visualization**: Plot charts to visualize fund performance and comparisons.
+- **AI-Generated Insights**: Receive a pros and cons analysis of the selected fund on the plot return page.
 - **User-Friendly Interface**: Built with Streamlit for a seamless user experience.
 
 ## Installation
@@ -47,26 +48,46 @@ To set up FundFinder, you need to have Python and Streamlit installed. Follow th
    - **View Fund Details**: See detailed information about each fund.
    - **Compare Funds**: Analyze and compare different funds based on returns and expense ratios.
    - **Visualize Data**: View charts that illustrate fund performance.
+   - **AI Insights**: On the plot return page, get AI-generated pros and cons analysis of the selected fund.
 
 ## Project Structure
 
 ```
 |---_temp 
-|   |-- condfig.py
+|   |-- config.py
+|
+|---components 
+|   |-- footer.py
 |
 |--- data 
-|   |-- mutual_fund_data.py
+|   |-- mutual_fund_data.csv
+|
+|--- dump 
+|   |-- temp_data.csv
 |
 |--- notebooks 
 |   |-- test.ipynb
+|
+|--- pages 
+|   |-- admin_page.ipynb
+|   |-- fund_list.ipynb
+|   |-- plot_return.ipynb
+|   |-- return_calculator.ipynb
+|
+|--- schema 
+|   |-- LLM_output.py
 |
 |--- scrap 
 |   |-- scrape.py
 |
 |--- utils 
 |   |-- calculate_return.py
+|   |-- auth.py
+|   |-- generate_response.py
 |
 |--- app.py 
+|--- .env 
+|--- config.yml 
 |--- .gitignore 
 |--- LICENSE
 |--- README.md 
@@ -81,6 +102,7 @@ To set up FundFinder, you need to have Python and Streamlit installed. Follow th
 - numpy
 - requests (for web scraping)
 - BeautifulSoup (for parsing HTML)
+- Groq API (for AI-generated insights)
 
 ## License
 
@@ -97,11 +119,5 @@ For any questions or feedback, please reach out to [work.soumyadipghorai@gmail.c
 ---
 
 Happy Investing!
-```
 
-### Notes:
-- Adjust the repository URL in the `Clone the Repository` section to your actual GitHub repository URL.
-- Update the email address and other personal information as needed.
-- Ensure that `requirements.txt` includes all necessary libraries for your app.
-
-This `README.md` provides a comprehensive guide to setting up and using your FundFinder app.
+---
