@@ -40,5 +40,8 @@ Given the following mutual fund details:
 - **Assets Under Management (AUM)**: {AUM} Cr
 
 ### PROMPT 
-Please provide a detailed analysis including the pros and cons of investing in this mutual fund.
+Please provide a detailed analysis including the only the pros and cons of investing in this mutual fund.
+
+### NOTE: 
+return output  in a JSON format without adding any extra text
 """
