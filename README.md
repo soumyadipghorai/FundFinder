@@ -2,6 +2,8 @@
 
 **FundFinder** is a powerful and intuitive Streamlit app designed to help investors select the best mutual funds by providing detailed comparisons and insights. The app scrapes mutual fund data from the internet, calculates returns before and after taxes, and compares funds based on their performance and expense ratios. It also visualizes the data to aid in making informed investment decisions.
 
+<img src='assets/app ss.png' alt="run project" style="width:100%"/>
+
 ## Features
 
 - **Fund Data Scraping**: Automatically fetch mutual fund details from the internet.
@@ -43,12 +45,15 @@ To set up FundFinder, you need to have Python and Streamlit installed. Follow th
    streamlit run app.py
    ```
 
+
 2. **Interact with the App**:
    - **Fund Selection**: Browse through the list of mutual funds.
    - **View Fund Details**: See detailed information about each fund.
    - **Compare Funds**: Analyze and compare different funds based on returns and expense ratios.
    - **Visualize Data**: View charts that illustrate fund performance.
    - **AI Insights**: On the plot return page, get AI-generated pros and cons analysis of the selected fund.
+
+<img src="assets/image.png" alt="run project" style="width:100%; max-width:600px;"/>
 
 ## Project Structure
 
