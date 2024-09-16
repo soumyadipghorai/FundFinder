@@ -37,6 +37,15 @@ To set up FundFinder, you need to have Python and Streamlit installed. Follow th
    pip install -r requirements.txt
    ```
 
+4. **Set up AI Features**:
+
+   You can customize the AI-generated insights by adding your `GROQ_API_KEY` and specifying the model name in the `.env` file. The AI model currently used is `GROQ_LLama`. To set up, update the `.env` file like this:
+
+   ```bash
+   GROQ_API_KEY=your_api_key
+   GROQ_LLama=model_name
+   ```
+
 ## Usage
 
 1. **Run the Streamlit App**:
@@ -44,7 +53,6 @@ To set up FundFinder, you need to have Python and Streamlit installed. Follow th
    ```bash
    streamlit run app.py
    ```
-
 
 2. **Interact with the App**:
    - **Fund Selection**: Browse through the list of mutual funds.
@@ -124,5 +132,3 @@ For any questions or feedback, please reach out to [work.soumyadipghorai@gmail.c
 ---
 
 Happy Investing!
-
----
