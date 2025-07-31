@@ -1,6 +1,7 @@
 import streamlit as st 
 import pandas as pd 
 from utils.calculate_return import CalculateReturns
+from md import CATEGORY_MAPPER
 
 st.title("Mutual Fund List") 
 st.write("Filter and find the best mutual funds tailored to your investment preferences.")
@@ -24,6 +25,7 @@ with col1 :
         max_value = 100000 if s_type == "SIP" else 100000*100
     ) 
     category = st.selectbox("Category",df['category'].unique())
+
 
 with col2 :
     fund_type = st.selectbox("Fund Type",df['fund_type'].unique())
@@ -73,4 +75,6 @@ for feature in feature_map :
     df = df[(df[feature] >= feature_map[feature][0]) & (
         df[feature] <= feature_map[feature][1]
     )]
+
+st.warning("💡"+CATEGORY_MAPPER[category][0])
 st.dataframe(df, use_container_width=True)
