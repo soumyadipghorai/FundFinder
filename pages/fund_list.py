@@ -11,7 +11,8 @@ df.dropna(inplace=True)
 fixed_items = ['return_before_tax_deduction', 'return_atfer_tax_deduction', 'fund_name']
 removed_items = [
     'fund_manager_name','fund_manager_teneur','fund_manager_experience',
-    'fund_manager_prev_funds','fund_manager_prev_total_funds'
+    'fund_manager_prev_funds','fund_manager_prev_total_funds', 'risk', 'fund_type', 
+    'category'
 ]
 
 col1, col2 = st.columns(2)
@@ -22,6 +23,7 @@ with col1 :
         "Select deposit amount", step = 500, min_value = 500, 
         max_value = 100000 if s_type == "SIP" else 100000*100
     ) 
+    category = st.selectbox("Category",df['category'].unique())
 
 with col2 :
     fund_type = st.selectbox("Fund Type",df['fund_type'].unique())
@@ -32,9 +34,21 @@ with col2 :
     selected_columns = st.multiselect(label="Select features", options= list(
         filter(lambda x: x not in fixed_items+removed_items, list(df.columns)+['total_tax'])
     ))
-    
+
+    feature_map = {}
+    if selected_columns :
+        with st.expander('Additional Filters') : 
+            for feature in selected_columns : 
+                if feature != 'total_tax' :
+                    min_val, max_val = df[feature].min(), df[feature].max()
+                    selected_range = st.slider(
+                        f"Filter for {feature}", min_value= min_val, max_value= max_val, 
+                        value = (min_val, max_val)
+                    )
+                    feature_map[feature] = selected_range
+
 income_before_tax, income_after_tax, total_tax = [], [], []
-df = df[(df.risk == risk_type) & (df.fund_type == fund_type)]
+df = df[(df.risk == risk_type) & (df.fund_type == fund_type) & (df.category == category)]
 for i in range(len(df)) : 
     obj = CalculateReturns(
         Principle = principle, returns = df.iloc[i]['overall_return'], 
@@ -50,8 +64,13 @@ df['return_atfer_tax_deduction'] = income_after_tax
 df['return_before_tax_deduction'] = income_before_tax
 df['total_tax'] = total_tax
 
+
 st.text("")
 st.text("")
 to_drop = list(filter(lambda x : x not in selected_columns+fixed_items, list(df.columns)))
 df.drop(to_drop, axis = 1, inplace = True)
+for feature in feature_map : 
+    df = df[(df[feature] >= feature_map[feature][0]) & (
+        df[feature] <= feature_map[feature][1]
+    )]
 st.dataframe(df, use_container_width=True)
